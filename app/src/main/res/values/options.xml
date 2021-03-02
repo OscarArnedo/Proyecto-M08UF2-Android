@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options">
+        <item>32 RED</item>
+        <item>15 BLACK</item>
+        <item>19 RED</item>
+        <item>4 BLACK</item>
+        <item>21 RED</item>
+        <item>2 BLACK</item>
+        <item>25 RED</item>
+        <item>17 BLACK</item>
+        <item>34 RED</item>
+        <item>6 BLACK</item>
+        <item>27 RED</item>
+        <item>13 BLACK</item>
+        <item>36 RED</item>
+        <item>11 BLACK</item>
+        <item>30 RED</item>
+        <item>8 BLACK</item>
+        <item>23 RED</item>
+        <item>10 BLACK</item>
+        <item>5 RED</item>
+        <item>24 BLACK</item>
+        <item>16 RED</item>
+        <item>33 BLACK</item>
+        <item>1 RED</item>
+        <item>20 BLACK</item>
+        <item>14 RED</item>
+        <item>31 BLACK</item>
+        <item>9 RED</item>
+        <item>22 BLACK</item>
+        <item>18 RED</item>
+        <item>29 BLACK</item>
+        <item>7 RED</item>
+        <item>28 BLACK</item>
+        <item>12 RED</item>
+        <item>35 BLACK</item>
+        <item>3 RED</item>
+        <item>26 BLACK</item>
+        <item>0</item>
+        <item>PICHULA</item>
+    </string-array>
+</resources>
