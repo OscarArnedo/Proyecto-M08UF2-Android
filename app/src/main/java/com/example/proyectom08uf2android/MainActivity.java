@@ -19,19 +19,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isPlaying = true;
     private Intent intent;
-    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*intent = new Intent(this, AudioIntentService.class);
+        intent = new Intent(this, AudioIntentService.class);
         intent.putExtra("operacio", "inici");
-        startService(intent);*/
-
-        mp = MediaPlayer.create(this, R.raw.musica_casino);
-        mp.start();
+        startService(intent);
 
     }
 
@@ -66,18 +62,14 @@ public class MainActivity extends AppCompatActivity {
                     isPlaying = !isPlaying;
                     text = "PAUSE MUSIC";
                     item.setTitle(text);
-                    mp.start();
-                    //intent.putExtra("operacio", "inici");
-                    //startService(intent);
+                    intent.putExtra("operacio", "inici");
                 } else {
                     isPlaying = !isPlaying;
                     text = "PLAY MUSIC";
                     item.setTitle(text);
-                    mp.pause();
-                    //intent.putExtra("operacio", "pausa");
-                    //startService(intent);
+                    intent.putExtra("operacio", "pausa");
                 }
-
+                startService(intent);
                 return true;
             /*case R.id.:
                 exportar();
