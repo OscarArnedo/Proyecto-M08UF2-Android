@@ -27,9 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPwd;
     private Button btSignUp;
 
-    private String name;
-    private String email;
-    private String pwd;
+    User user = null;
 
     FirebaseAuth faAuth;
     DatabaseReference drDataBase;
@@ -51,12 +49,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                name = etName.getText().toString();
-                email = etEmail.getText().toString();
-                pwd = etPwd.getText().toString();
+                user = new User(etName.getText().toString(), etPwd.getText().toString(), etEmail.getText().toString());
 
-                if(!name.isEmpty() && !email.isEmpty() && !pwd.isEmpty()) {
-                    if(pwd.length() >= 6) {
+                if(!user.getName().isEmpty() && !user.getEmail().isEmpty() && !user.getPasswd().isEmpty()) {
+                    if(user.getPasswd().length() >= 6) {
                         registerUser();
                     } else {
                         Toast.makeText(LoginActivity.this, "The password must have at least 6 characters", Toast.LENGTH_LONG).show();
@@ -70,15 +66,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void registerUser(){
-        faAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        faAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPasswd()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
                     Map<String, Object> map = new HashMap<>();
-                    map.put("name", name);
-                    map.put("email", email);
-                    map.put("pwd", pwd);
+                    map.put("name", user.getName());
+                    map.put("email", user.getEmail());
+                    map.put("pwd", user.getPasswd());;
+                    map.put("money", user.getMoney());
 
 
                     String id = faAuth.getCurrentUser().getUid();
