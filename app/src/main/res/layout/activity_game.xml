@@ -8,6 +8,16 @@
     tools:context=".GameActivity">
 
     <Button
+        android:id="@+id/btPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/roulette"
+        android:layout_alignParentRight="true"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="350dp"
+        android:text="+" />
+
+    <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,12 +45,14 @@
 
     <ImageView
         android:id="@+id/pointer"
-        android:scaleType="centerInside"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@id/roulette"
+        android:layout_alignTop="@id/roulette"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="35dp"
         android:paddingLeft="20dp"
+        android:scaleType="centerInside"
         app:srcCompat="@drawable/puntero" />
 
     <Spinner
@@ -49,5 +61,34 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginVertical="100dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/roulette"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:text="0"
+        android:textSize="28sp" />
+
+    <Button
+        android:id="@+id/btMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/roulette"
+        android:layout_alignParentLeft="true"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="350dp"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="100dp"
+        android:textSize="20sp" />
 
 </RelativeLayout>

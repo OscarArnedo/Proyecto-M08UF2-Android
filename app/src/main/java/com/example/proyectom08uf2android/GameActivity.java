@@ -2,7 +2,13 @@ package com.example.proyectom08uf2android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -19,8 +25,13 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
 
     Button button;
+    Button button2;
+    Button button3;
     TextView textView;
+    TextView textView2;
+    TextView textView3;
     ImageView iv_roulette;
+    ImageView pointer;
     Spinner spinner;
 
     Random r;
@@ -28,17 +39,41 @@ public class GameActivity extends AppCompatActivity {
 
     private static final float FACTOR = 4.86f;
 
+    private String apuesta;
+    private int dinero = 5000;
+    private int dineroApostado;
+    private boolean resultado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         button = (Button) findViewById(R.id.button2);
+        button2 = (Button) findViewById(R.id.btMinus);
+        button3 = (Button) findViewById(R.id.btPlus);
         textView = (TextView) findViewById(R.id.textView);
+        textView2 = (TextView) findViewById(R.id.textView2);
+        textView3 = (TextView) findViewById(R.id.textView3);
         iv_roulette = (ImageView) findViewById(R.id.roulette);
+        pointer = (ImageView) findViewById(R.id.pointer);
         spinner = (Spinner) findViewById(R.id.spOptions);
 
+        Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.BLACK);
+        Path path = new Path();
+        path.moveTo(150, 0);
+        path.lineTo(180, 100);
+        path.lineTo(150, 80);
+        path.lineTo(120, 100);
+        path.close();
+        canvas.drawPath(path, paint);
+        pointer.setImageBitmap(bitmap);
+
         textView.setText("CLICK \"SPIN\" TO PLAY");
+        actualizarDinero();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.options, android.R.layout.simple_spinner_item);
@@ -61,12 +96,28 @@ public class GameActivity extends AppCompatActivity {
                 rotate.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        spinner.setEnabled(false);
+                        button2.setEnabled(false);
+                        button3.setEnabled(false);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         textView.setText(currentNumber(360 - (degree % 360)));
+                        resultado = apuesta.equals(textView.getText().toString());
+                        dineroApostado = Integer.parseInt(textView2.getText().toString());
+                        if(resultado){
+                            dinero = (int) (dinero + (dineroApostado * 1.3));
+                        } else {
+                            dinero -= dineroApostado;
+                        }
+                        textView2.setText("0");
+
+                        spinner.setEnabled(true);
+                        button2.setEnabled(true);
+                        button3.setEnabled(true);
+
+                        actualizarDinero();
                     }
 
                     @Override
@@ -78,11 +129,14 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        button3.setOnClickListener(this::betPlus);
+        button2.setOnClickListener(this::betMinus);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                textView.setText(parent.getItemAtPosition(position).toString());
+                apuesta = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -90,6 +144,26 @@ public class GameActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void betMinus(View view) {
+        int newApuesta = Integer.parseInt(textView2.getText().toString()) - 10;
+        if(newApuesta < 0){
+            textView2.setText("0");
+        }else{
+            textView2.setText(String.valueOf(newApuesta));
+        }
+    }
+
+    private void betPlus(View view) {
+        int newApuesta = Integer.parseInt(textView2.getText().toString()) + 10;
+        if(newApuesta <= dinero){
+            textView2.setText(String.valueOf(newApuesta));
+        }
+    }
+
+    private void actualizarDinero(){
+        textView3.setText(String.valueOf(dinero));
     }
 
     private String currentNumber(int degrees){
