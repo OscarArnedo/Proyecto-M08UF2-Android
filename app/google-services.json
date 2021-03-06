@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "830894353909",
+    "project_id": "usuarios-ruleta",
+    "storage_bucket": "usuarios-ruleta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830894353909:android:746f51c84b3fa2bd8f84bc",
+        "android_client_info": {
+          "package_name": "com.example.proyectom08uf2android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830894353909-v0heplr3ulqermdbpo8hnq13ho1rl1kp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proyectom08uf2android",
+            "certificate_hash": "19023af06fa33fc5481af98c29eb98972d3a79ff"
+          }
+        },
+        {
+          "client_id": "830894353909-3a79ffd0lutobd3l2tsojc0b5al21epv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEbV9wJMRZFeHJNCfibr-On9dME7ysdZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830894353909-3a79ffd0lutobd3l2tsojc0b5al21epv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
