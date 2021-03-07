@@ -1,6 +1,6 @@
 package com.example.proyectom08uf2android;
 
-public class User {
+public class User implements Comparable<User>{
 
     private String name, passwd, email;
     private int money;
@@ -53,5 +53,16 @@ public class User {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public String toStringRanking(){
+        return name+" - $"+String.valueOf(money);
+    }
+
+    @Override
+    public int compareTo(User u) {
+        if (u.getMoney() < money ) return -1;
+        else if (u.getMoney() == money) return 0;
+        else return 1;
     }
 }
