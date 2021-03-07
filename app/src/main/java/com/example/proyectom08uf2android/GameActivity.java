@@ -1,5 +1,6 @@
 package com.example.proyectom08uf2android;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -21,6 +22,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
@@ -34,6 +42,12 @@ public class GameActivity extends AppCompatActivity {
     ImageView iv_roulette;
     ImageView pointer;
     Spinner spinner;
+    TextView tvWelcomeUser;
+
+    private User user;
+
+    private FirebaseAuth faAuth;
+    private DatabaseReference drDatabase;
 
     Random r;
     int degree = 0, degree_old = 0;
@@ -45,7 +59,6 @@ public class GameActivity extends AppCompatActivity {
     private static final float FACTOR = 4.86f;
 
     private String apuesta;
-    private int dinero = 5000;
     private int dineroApostado;
     private boolean resultado;
 
@@ -63,6 +76,12 @@ public class GameActivity extends AppCompatActivity {
         iv_roulette = (ImageView) findViewById(R.id.roulette);
         pointer = (ImageView) findViewById(R.id.pointer);
         spinner = (Spinner) findViewById(R.id.spOptions);
+        tvWelcomeUser = (TextView) findViewById(R.id.tvWelcomeUser);
+
+        faAuth = FirebaseAuth.getInstance();
+        drDatabase = FirebaseDatabase.getInstance().getReference();
+
+        getUserInfo();
 
         Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -96,7 +115,7 @@ public class GameActivity extends AppCompatActivity {
         textView3.startAnimation(animFadein);
 
         textView.setText("CLICK \"SPIN\" TO PLAY");
-        actualizarDinero();
+
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.options, android.R.layout.simple_spinner_item);
@@ -130,9 +149,9 @@ public class GameActivity extends AppCompatActivity {
                         resultado = apuesta.equals(textView.getText().toString());
                         dineroApostado = Integer.parseInt(textView2.getText().toString());
                         if (resultado) {
-                            dinero = (int) (dinero + (dineroApostado * 1.3));
+                            user.setMoney((int) (user.getMoney() + (dineroApostado * 1.3)));
                         } else {
-                            dinero -= dineroApostado;
+                            user.setMoney(user.getMoney() - dineroApostado);
                         }
                         textView2.setText("0");
 
@@ -169,6 +188,26 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    private void getUserInfo() {
+        String id = faAuth.getCurrentUser().getUid();
+        drDatabase.child("Users").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.child("name").getValue().toString();
+                int money = Integer.parseInt(dataSnapshot.child("money").getValue().toString());
+
+                user = new User(name, money);
+                tvWelcomeUser.setText(name);
+                actualizarDinero();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void betMinus(View view) {
         int newApuesta = Integer.parseInt(textView2.getText().toString()) - 10;
         if (newApuesta < 0) {
@@ -180,13 +219,13 @@ public class GameActivity extends AppCompatActivity {
 
     private void betPlus(View view) {
         int newApuesta = Integer.parseInt(textView2.getText().toString()) + 10;
-        if (newApuesta <= dinero) {
+        if (newApuesta <= user.getMoney()) {
             textView2.setText(String.valueOf(newApuesta));
         }
     }
 
     private void actualizarDinero() {
-        textView3.setText(String.valueOf(dinero));
+        textView3.setText(String.valueOf(user.getMoney()));
     }
 
     private String currentNumber(int degrees) {

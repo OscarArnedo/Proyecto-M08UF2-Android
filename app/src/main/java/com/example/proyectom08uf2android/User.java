@@ -18,6 +18,11 @@ public class User {
         //this.money = money;
     }
 
+    public User(String name, int money){
+        this.name = name;
+        this.money = money;
+    }
+
     public String getName() {
         return name;
     }
