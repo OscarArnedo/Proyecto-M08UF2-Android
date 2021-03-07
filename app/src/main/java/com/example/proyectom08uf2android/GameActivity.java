@@ -71,8 +71,6 @@ public class GameActivity extends AppCompatActivity {
     Animation animBounce;
     Animation animRotate;
 
-    private Intent intentAudio;
-
     private static final float FACTOR = 4.86f;
 
     private String apuesta;
