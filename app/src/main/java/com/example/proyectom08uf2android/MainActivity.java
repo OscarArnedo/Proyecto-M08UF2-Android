@@ -102,13 +102,30 @@ public class MainActivity extends AppCompatActivity {
                 }
                 startService(intentAudio);
                 return true;
-            /*case R.id.:
-                exportar();
-                return true;*/
+            case R.id.closeSession:
+                faAuth.signOut();
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                finish();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onStop() {
+        // call the superclass method first
+        super.onStop();
+        intentAudio.putExtra("operacio", "pausa");
+    }
+
+    @Override
+    protected void onPause() {
+        // call the superclass method first
+        super.onPause();
+        intentAudio.putExtra("operacio", "pausa");
+    }
+
 }
 

@@ -3,13 +3,20 @@ package com.example.proyectom08uf2android;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,6 +40,10 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
+    private String TAG = "GameActivity";
+    private boolean isPlaying = true;
+    private Intent intentAudio;
+
     Button button;
     Button button2;
     Button button3;
@@ -48,6 +59,7 @@ public class GameActivity extends AppCompatActivity {
 
     private FirebaseAuth faAuth;
     private DatabaseReference drDatabase;
+    private String id;
 
     Random r;
     int degree = 0, degree_old = 0;
@@ -67,6 +79,32 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        //Audio service
+        intentAudio = new Intent(this, AudioIntentService.class);
+        intentAudio.putExtra("operacio", "inici");
+        startService(intentAudio);
+
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    Log.d(TAG, "Incoming call: Pause music");
+                    intentAudio.putExtra("operacio", "pausa");
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    Log.d(TAG, "Not in call: Play music");
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    Log.d(TAG, "A call is dialing, active or on hold");
+                    intentAudio.putExtra("operacio", "pausa");
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
+
         button = (Button) findViewById(R.id.button2);
         button2 = (Button) findViewById(R.id.btMinus);
         button3 = (Button) findViewById(R.id.btPlus);
@@ -81,6 +119,7 @@ public class GameActivity extends AppCompatActivity {
         faAuth = FirebaseAuth.getInstance();
         drDatabase = FirebaseDatabase.getInstance().getReference();
 
+        id = faAuth.getCurrentUser().getUid();
         getUserInfo();
 
         Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
@@ -189,7 +228,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        String id = faAuth.getCurrentUser().getUid();
         drDatabase.child("Users").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -197,7 +235,7 @@ public class GameActivity extends AppCompatActivity {
                 int money = Integer.parseInt(dataSnapshot.child("money").getValue().toString());
 
                 user = new User(name, money);
-                tvWelcomeUser.setText(name);
+                tvWelcomeUser.setText("Welcome "+name);
                 actualizarDinero();
             }
 
@@ -207,6 +245,11 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setUserInfo() {
+        drDatabase.child("Users").child(id).child("money").setValue(user.getMoney());
+    }
+
 
     private void betMinus(View view) {
         int newApuesta = Integer.parseInt(textView2.getText().toString()) - 10;
@@ -226,6 +269,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void actualizarDinero() {
         textView3.setText(String.valueOf(user.getMoney()));
+        setUserInfo();
     }
 
     private String currentNumber(int degrees) {
@@ -344,5 +388,58 @@ public class GameActivity extends AppCompatActivity {
         }
 
         return text;
+    }
+
+    @Override
+    protected void onStop() {
+        // call the superclass method first
+        super.onStop();
+        intentAudio.putExtra("operacio", "pausa");
+    }
+
+    @Override
+    protected void onPause() {
+        // call the superclass method first
+        super.onPause();
+        intentAudio.putExtra("operacio", "pausa");
+    }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { //Función para añadir el menú definido en menu_principal.xml al action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.menu_principal, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.playStopMusic:
+                String text;
+
+                if (!isPlaying) {
+                    isPlaying = !isPlaying;
+                    text = "PAUSE MUSIC";
+                    item.setTitle(text);
+                    intentAudio.putExtra("operacio", "inici");
+                } else {
+                    isPlaying = !isPlaying;
+                    text = "PLAY MUSIC";
+                    item.setTitle(text);
+                    intentAudio.putExtra("operacio", "pausa");
+                }
+                startService(intentAudio);
+                return true;
+            case R.id.closeSession:
+                intentAudio.putExtra("operacio", "pausa");
+                faAuth.signOut();
+                startActivity(new Intent(GameActivity.this, RegisterActivity.class));
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

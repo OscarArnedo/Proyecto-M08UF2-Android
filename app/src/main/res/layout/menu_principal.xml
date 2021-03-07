@@ -4,4 +4,8 @@
         android:title="STOP MUSIC"
         app:showAsAction="never">
     </item>
+    <item android:id="@+id/closeSession"
+        android:title="CLOSE SESSION"
+        app:showAsAction="never">
+    </item>
 </menu>
