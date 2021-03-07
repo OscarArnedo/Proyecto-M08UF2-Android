@@ -3,6 +3,7 @@ package com.example.proyectom08uf2android;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,6 +26,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     ImageView pointer;
     Spinner spinner;
     TextView tvWelcomeUser;
+    CheckBox cbVictoria;
 
     private User user;
 
@@ -67,6 +70,8 @@ public class GameActivity extends AppCompatActivity {
     Animation animFadein;
     Animation animBounce;
     Animation animRotate;
+
+    private Intent intentAudio;
 
     private static final float FACTOR = 4.86f;
 
@@ -115,6 +120,7 @@ public class GameActivity extends AppCompatActivity {
         pointer = (ImageView) findViewById(R.id.pointer);
         spinner = (Spinner) findViewById(R.id.spOptions);
         tvWelcomeUser = (TextView) findViewById(R.id.tvWelcomeUser);
+        cbVictoria = (CheckBox) findViewById(R.id.checkBox);
 
         faAuth = FirebaseAuth.getInstance();
         drDatabase = FirebaseDatabase.getInstance().getReference();
@@ -153,6 +159,8 @@ public class GameActivity extends AppCompatActivity {
         textView2.startAnimation(animFadein);
         textView3.startAnimation(animFadein);
 
+        intentAudio = new Intent(this, AudioIntentService.class);
+
         textView.setText("CLICK \"SPIN\" TO PLAY");
 
 
@@ -177,6 +185,8 @@ public class GameActivity extends AppCompatActivity {
                 rotate.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        intentAudio.putExtra("operacio", "ball");
+                        startService(intentAudio);
                         spinner.setEnabled(false);
                         button2.setEnabled(false);
                         button3.setEnabled(false);
@@ -185,11 +195,19 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         textView.setText(currentNumber(360 - (degree % 360)));
-                        resultado = apuesta.equals(textView.getText().toString());
+                        if(cbVictoria.isChecked()){
+                            resultado = true;
+                        } else {
+                            resultado = apuesta.equals(textView.getText().toString());
+                        }
                         dineroApostado = Integer.parseInt(textView2.getText().toString());
                         if (resultado) {
+                            intentAudio.putExtra("operacio", "win");
+                            startService(intentAudio);
                             user.setMoney((int) (user.getMoney() + (dineroApostado * 1.3)));
                         } else {
+                            intentAudio.putExtra("operacio", "loss");
+                            startService(intentAudio);
                             user.setMoney(user.getMoney() - dineroApostado);
                         }
                         textView2.setText("0");

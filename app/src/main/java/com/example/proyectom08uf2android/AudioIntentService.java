@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 public class AudioIntentService extends IntentService {
 
     private MediaPlayer mp;
+    private MediaPlayer win;
+    private MediaPlayer loss;
+    private MediaPlayer ball;
 
     public AudioIntentService() {
         super("serveiAudio");
@@ -21,6 +24,9 @@ public class AudioIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         mp = MediaPlayer.create(this, R.raw.musica_casino);
+        ball = MediaPlayer.create(this, R.raw.ball);
+        win = MediaPlayer.create(this, R.raw.win);
+        loss = MediaPlayer.create(this, R.raw.loss);
     }
 
     @Override
@@ -41,6 +47,15 @@ public class AudioIntentService extends IntentService {
                     break;
                 case "salta":
                     mp.seekTo(10000);
+                    break;
+                case "ball":
+                    ball.start();
+                    break;
+                case "win":
+                    win.start();
+                    break;
+                case "loss":
+                    loss.start();
                     break;
                 default:
                     break;
