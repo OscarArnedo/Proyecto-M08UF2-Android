@@ -38,10 +38,10 @@
         android:id="@+id/btGoBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:text="Go back"
-        android:textColor="@color/white"
         android:layout_marginTop="20dp"
-        android:onClick="goBack"/>
+        android:background="@color/black"
+        android:onClick="goBack"
+        android:text="I DON'T HAVE AN ACCOUNT"
+        android:textColor="@color/white" />
 
 </LinearLayout>
