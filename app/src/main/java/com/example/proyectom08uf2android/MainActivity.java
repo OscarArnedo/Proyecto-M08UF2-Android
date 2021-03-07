@@ -69,12 +69,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void play(View view) {
-        Intent intent = new Intent(getApplicationContext(),
-                GameActivity.class);
+        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
         startActivity(intent);
     }
 
     public void ranking(View view) {
+        Intent intent = new Intent(getApplicationContext(), RankingActivity.class);
+        startActivity(intent);
     }
 
     public void signOut(View view) {
