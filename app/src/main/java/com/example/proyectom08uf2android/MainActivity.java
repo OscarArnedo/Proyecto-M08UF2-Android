@@ -40,19 +40,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    Log.d(TAG,"Incoming call: Pause music");
+                    Log.d(TAG, "Incoming call: Pause music");
                     intentAudio.putExtra("operacio", "pausa");
-                } else if(state == TelephonyManager.CALL_STATE_IDLE) {
-                    Log.d(TAG,"Not in call: Play music");
-                } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    Log.d(TAG,"A call is dialing, active or on hold");
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    Log.d(TAG, "Not in call: Play music");
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    Log.d(TAG, "A call is dialing, active or on hold");
                     intentAudio.putExtra("operacio", "pausa");
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }
         };
         TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        if(mgr != null) {
+        if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 

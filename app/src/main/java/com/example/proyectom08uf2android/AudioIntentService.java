@@ -9,7 +9,7 @@ import android.telephony.TelephonyManager;
 
 import androidx.annotation.Nullable;
 
-public class AudioIntentService extends IntentService{
+public class AudioIntentService extends IntentService {
 
     private MediaPlayer mp;
 
@@ -32,15 +32,15 @@ public class AudioIntentService extends IntentService{
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         if (intent != null) {
             String operacio = intent.getStringExtra("operacio");
-            switch (operacio){
+            switch (operacio) {
                 case "inici":
-
                     mp.start();
                     break;
                 case "pausa":
                     mp.pause();
                     break;
-                case "salta": mp.seekTo(10000);
+                case "salta":
+                    mp.seekTo(10000);
                     break;
                 default:
                     break;
