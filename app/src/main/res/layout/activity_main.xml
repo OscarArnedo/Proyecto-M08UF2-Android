@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/btPlay"
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginTop="108dp"
@@ -20,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@+id/RouletteLogo" />
 
     <Button
-        android:id="@+id/ranking"
+        android:id="@+id/btRanking"
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginTop="30dp"
@@ -30,20 +31,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play" />
+        app:layout_constraintTop_toBottomOf="@+id/btPlay" />
 
     <Button
-        android:id="@+id/exit"
+        android:id="@+id/btSignOut"
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginTop="30dp"
         android:background="@android:color/holo_green_dark"
-        android:onClick="exit"
-        android:text="EXIT"
+        android:onClick="signOut"
+        android:text="SIGN OUT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ranking" />
+        app:layout_constraintTop_toBottomOf="@+id/btRanking" />
 
     <ImageView
         android:id="@+id/RouletteLogo"

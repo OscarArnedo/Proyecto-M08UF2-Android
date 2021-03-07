@@ -6,7 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Name"/>
 
     <EditText
         android:id="@+id/etEmail"
@@ -25,23 +32,23 @@
         android:inputType="textPassword"/>
 
     <Button
-        android:id="@+id/btLogIn"
+        android:id="@+id/btSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
-        android:text="LOG IN"
+        android:text="SIGN UP"
         android:textColor="@color/white"
         android:layout_marginTop="100dp"
-        android:onClick="logIn"/>
+        android:onClick="signUp"/>
 
     <Button
-        android:id="@+id/btGoBack"
+        android:id="@+id/btSendToLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
-        android:text="Go back"
+        android:text="I already have an account"
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
-        android:onClick="goBack"/>
+        android:onClick="sendToLogIn"/>
 
 </LinearLayout>

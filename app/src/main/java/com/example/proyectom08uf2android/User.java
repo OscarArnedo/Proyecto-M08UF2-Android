@@ -12,6 +12,12 @@ public class User {
         this.money = 5000;
     }
 
+    public User(String passwd, String email) {
+        this.passwd = passwd;
+        this.email = email;
+        //this.money = money;
+    }
+
     public String getName() {
         return name;
     }

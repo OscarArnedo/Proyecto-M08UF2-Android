@@ -3,10 +3,7 @@ package com.example.proyectom08uf2android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothA2dp;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -15,9 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toolbar;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
@@ -25,20 +21,21 @@ public class MainActivity extends AppCompatActivity {
     private boolean isPlaying = true;
     private Intent intentAudio;
 
+    FirebaseAuth faAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Firebase database
+        faAuth = FirebaseAuth.getInstance();
+
+        //Audio service
         intentAudio = new Intent(this, AudioIntentService.class);
         intentAudio.putExtra("operacio", "inici");
         startService(intentAudio);
 
-
-
-
-
-        //Polítiques audio --------------------------------
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 
-        // ---------------------------------------------
 
     }
 
@@ -81,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
     public void ranking(View view) {
     }
 
-    public void exit(View view) {
+    public void signOut(View view) {
+        faAuth.signOut();
+        startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+        finish();
     }
 
     @Override
